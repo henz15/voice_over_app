@@ -1,29 +1,26 @@
 const synth = window.speechSynthesis;
 const textInput = document.getElementById("txtEnglish");
-const voicesDdl = document.getElementById("ddlVoices");
 const voiceForm = document.querySelector("form");
 const voiceSpeedBtn = document.querySelector("#btnVoiceSpeed");
 const pausePlayBtn = document.querySelector("#btnPausePlay");
 
 let voiceSpeed = 1;
 let voices = [];
+const playIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+                    </svg>`;
+
+const pauseIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>`;
 
 synth.cancel();
 
 const getVoices = () => {
-  voices = synth.getVoices();
-
-  voices
-    .filter((x) => x.lang === "en-GB" || x.lang === "en-US")
-    .forEach((voice) => {
-      const option = document.createElement("option");
-
-      option.textContent = `${voice.name} (${voice.lang})`;
-      option.setAttribute("data-lang", voice.lang);
-      option.setAttribute("data-name", voice.name);
-
-      voicesDdl.appendChild(option);
-    });
+  voices = synth
+    .getVoices()
+    .filter((x) => x.lang === "en-GB" || x.lang === "en-US");
 };
 
 getVoices();
@@ -42,6 +39,8 @@ const speak = () => {
   if (textInput.value) {
     const speakText = new SpeechSynthesisUtterance(textInput.value);
     speakText.onend = (e) => {
+      voiceSpeedBtn.style.visibility = "visible";
+      pausePlayBtn.innerHTML = `${playIcon} Play`;
       console.log("done speaking........");
     };
 
@@ -49,31 +48,13 @@ const speak = () => {
       console.error("Something went wrong");
     };
 
-    const selectedVoice =
-      voicesDdl.selectedOptions[0].getAttribute("data-name");
-
-    voices.forEach((voice) => {
-      if (voice.name === selectedVoice) {
-        speakText.voice = voice;
-      }
-    });
-
+    speakText.voice = voices[2];
     speakText.rate = voiceSpeed;
     speakText.pitch = 1;
 
     synth.speak(speakText);
   }
 };
-
-voiceForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  speak();
-  textInput.blur();
-});
-
-voicesDdl.addEventListener("change", (e) => {
-  speak();
-});
 
 voiceSpeedBtn.addEventListener("click", function (e) {
   switch (this.textContent) {
@@ -100,14 +81,26 @@ voiceSpeedBtn.addEventListener("click", function (e) {
   }
 });
 
-pausePlayBtn.addEventListener("click", function (e) {
-  if (this.textContent === "Pause" && synth.speaking) {
+voiceForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  voiceSpeedBtn.style.visibility = "hidden";
+
+  if (pausePlayBtn.textContent.trim() === "Pause" && synth.speaking) {
     synth.pause();
-    this.textContent = "Play";
-  } else {
-    if (synth.paused) {
-      synth.resume();
-      this.textContent = "Pause";
-    }
+    pausePlayBtn.innerHTML = `${playIcon} Play`;
+    textInput.blur();
+    return;
   }
+
+  if (pausePlayBtn.textContent.trim() === "Play" && synth.paused) {
+    synth.resume();
+    pausePlayBtn.innerHTML = `${pauseIcon} Pause`;
+    textInput.blur();
+    return;
+  }
+
+  speak();
+  pausePlayBtn.innerHTML = `${pauseIcon} Pause`;
+  textInput.blur();
 });
