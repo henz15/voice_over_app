@@ -32,7 +32,6 @@ if (synth.onvoiceschanged !== undefined) {
 //speak
 const speak = () => {
   if (synth.speaking) {
-    console.log("Already speaking");
     return;
   }
 
@@ -41,7 +40,6 @@ const speak = () => {
     speakText.onend = (e) => {
       voiceSpeedBtn.style.visibility = "visible";
       pausePlayBtn.innerHTML = `${playIcon} Play`;
-      console.log("done speaking........");
     };
 
     speakText.onerror = (e) => {
