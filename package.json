@@ -4,7 +4,10 @@
   "description": "",
   "main": "tailwind.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "postcss src/input.css -o dist/css/app.css",
+    "build-js": "rollup --config",
+    "watch-src": "watch 'npm run build:css' src"
   },
   "repository": {
     "type": "git",
@@ -16,5 +19,21 @@
   "bugs": {
     "url": "https://github.com/henz15/voice_over_app/issues"
   },
-  "homepage": "https://github.com/henz15/voice_over_app#readme"
+  "homepage": "https://github.com/henz15/voice_over_app#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.12",
+    "postcss": "^8.4.18"
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^5.0.0",
+    "cssnano": "^5.1.13",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.2.0",
+    "@lopatnov/rollup-plugin-uglify": "^2.1.2",
+    "rollup": "^2.77.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0"
+  }
 }
