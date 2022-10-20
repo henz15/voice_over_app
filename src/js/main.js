@@ -40,6 +40,7 @@ const speak = () => {
     speakText.onend = (e) => {
       voiceSpeedBtn.style.visibility = "visible";
       pausePlayBtn.innerHTML = `${playIcon} Play`;
+      textInput.disabled = false;
     };
 
     speakText.onerror = (e) => {
@@ -78,7 +79,6 @@ voiceSpeedBtn.addEventListener("click", function (e) {
       break;
   }
 });
-
 voiceForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -86,19 +86,19 @@ voiceForm.addEventListener("submit", function (e) {
 
   if (pausePlayBtn.textContent.trim() === "Pause" && synth.speaking) {
     synth.pause();
-    pausePlayBtn.innerHTML = `${playIcon} Play`;
-    textInput.blur();
+    pausePlayBtn.innerHTML = `${playIcon} Resume`;
+    textInput.disabled = false;
     return;
   }
 
-  if (pausePlayBtn.textContent.trim() === "Play" && synth.paused) {
+  if (pausePlayBtn.textContent.trim() === "Resume" && synth.paused) {
     synth.resume();
     pausePlayBtn.innerHTML = `${pauseIcon} Pause`;
-    textInput.blur();
+    textInput.disabled = true;
     return;
   }
 
   speak();
   pausePlayBtn.innerHTML = `${pauseIcon} Pause`;
-  textInput.blur();
+  textInput.disabled = true;
 });
