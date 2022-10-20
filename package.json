@@ -2,12 +2,23 @@
   "name": "voice_over_app",
   "version": "1.0.0",
   "description": "",
-  "main": "tailwind.config.js",
+  "main": "index.js",
+  "watch": {
+    "build": {
+      "patterns": [
+        "src/css",
+        "src/js"
+      ],
+      "extensions": "js,css"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-css": "postcss src/input.css -o dist/css/app.css",
-    "build-js": "rollup --config",
-    "watch-src": "watch 'npm run build:css' src"
+    "start": "nodemon index.js",
+    "build:css": "postcss src/input.css -o dist/css/app.css",
+    "build:js": "rollup --config",
+    "build": "rollup --config",
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -22,18 +33,23 @@
   "homepage": "https://github.com/henz15/voice_over_app#readme",
   "devDependencies": {
     "autoprefixer": "^10.4.12",
-    "postcss": "^8.4.18"
+    "nodemon": "^2.0.20",
+    "npm-watch": "^0.11.0",
+    "postcss": "^8.4.18",
+    "watch": "^1.0.2"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^5.0.0",
+    "@lopatnov/rollup-plugin-uglify": "^2.1.2",
+    "child_process": "^1.0.2",
+    "chokidar": "^3.5.3",
     "cssnano": "^5.1.13",
     "postcss-cli": "^10.0.0",
-    "tailwindcss": "^3.2.0",
-    "@lopatnov/rollup-plugin-uglify": "^2.1.2",
     "rollup": "^2.77.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0"
+    "rollup-plugin-replace": "^2.2.0",
+    "tailwindcss": "^3.2.0"
   }
 }
